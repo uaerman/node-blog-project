@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import validator from 'validator'
 const {Schema} = mongoose
 
 const password = {
@@ -22,6 +22,7 @@ const reqString = {
 const postSchema = new Schema({
     title: reqString,
     content: reqString,
+    thumbnail: reqString,
     creator: {
         type: Schema.Types.ObjectId,
         ref: 'User'
