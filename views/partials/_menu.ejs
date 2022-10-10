@@ -22,6 +22,21 @@
                 </nav>
              </div>
           </div>
+          <div class=" col-md-2 di_none">
+            <% if (user) { %>
+               <ul class="email text_align_right" style="padding-right: 50px;">
+               <li><a class="hover-underline-animation" href="/users/dashboard">Dashboard</a></li>
+               <li><a class="hover-underline-animation" style="padding-right: 15px;"></a></li>
+               <li><a class="hover-underline-animation send_btn" href="/logout">Logout</a></li>
+               </ul>
+            <% } else { %>
+               <ul class="email text_align_right" style="padding-right: 50px;">
+               <li><a class="hover-underline-animation" href="/login">Login</a></li>
+               <li><a>/</a></li>
+               <li><a class="hover-underline-animation" href="/register">Register</a></li>
+               </ul>
+            <%}%>      
+          </div>
        </div>
     </div>
  </header>

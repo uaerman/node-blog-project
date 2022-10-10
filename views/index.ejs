@@ -5,9 +5,30 @@
             <link rel="stylesheet" href="/css/index-banner.css">
             <section class="index-head">
                 <h1>Node <span>Blog</span></h2>
-                <p>A Project builded with Node and Express</p>
+                    <p>A Project builded with Node and Express</p>
             </section>
             <h1 class="index-title text_align_center">Latest <span>Posts</span></h2>
-
-        <%- include("partials/_footer") %>
+                <div style="background-color: #252525;">
+                    <div class="container" style="margin-top: 25px;">
+                        <div class="row">
+                            <%for (post of posts) {%>
+                                <div class="col-sm-4">
+                                    <div class="card posts-card index-posts">
+                                        <img class="card-img-top" src="<%=post.thumbnail%>" alt="Card image cap">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                <%=post.title%>
+                                            </h5>
+                                            <p class="card-text">
+                                                <%=post.content.substring(0, 80)%>...
+                                            </p>
+                                            <a href="/posts/<%=post._id%>" class="btn btn-primary">Read more</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <%}%>
+                        </div>
+                    </div>
+                </div>
+                <%- include("partials/_footer") %>
     </body>

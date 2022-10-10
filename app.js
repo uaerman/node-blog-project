@@ -4,7 +4,8 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import router from './src/router/pageRouter.js'
 import postRouter from './src/router/postRouter.js'
-
+import { userRoute } from './src/router/userRouter.js';
+import { checkUser } from "./src/middlewares/authMiddleware.js"
 import conn from './src/dbConnect.js'
 
 dotenv.config()
@@ -22,8 +23,11 @@ app.use(cors())
 app.use(express.urlencoded({extended: true}))
 app.use(cookieParser())
 
+app.use('*', checkUser)
 app.use('/', router)
 app.use('/posts', postRouter)
+app.use('/users', userRoute)
+
 
 
 app.listen(port, () => {
