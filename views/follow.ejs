@@ -1,0 +1,49 @@
+<%- include("partials/_header") %>
+
+<body>
+  <%- include("partials/_menu") %>
+  <h1 class="text_align_center">
+    <%=`${user.username.toUpperCase()} ${follow.charAt(0).toUpperCase() +
+    follow.slice(1)}`%>
+  </h1>
+  <div class="container" style="margin-top: 25px">
+    <div class="row">
+      <% if (follow == 'followers') {%> <%for (follower of user.followers) {%>
+      <div class="col-sm-3">
+        <div class="card posts-card" style="width: 18rem; margin-top: 25px">
+          <img
+            class="card-img-top"
+            src="<%=follower.url%>"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <h5 class="card-title"><%=follower.username%></h5>
+            <p class="card-text"><%=follower.profileDesc.substring(0, 80)%></p>
+            <a href="/users/<%=follower._id%>" class="btn btn-primary"
+              >Profile</a
+            >
+          </div>
+        </div>
+      </div>
+      <%}%> <%}%> <%if (follow == 'followings') {%> <%for (follower of user.followings) {%>
+      <div class="col-sm-3">
+        <div class="card posts-card" style="width: 18rem; margin-top: 25px">
+          <img
+            class="card-img-top"
+            src="<%=follower.url%>"
+            alt="Card image cap"
+          />
+          <div class="card-body">
+            <h5 class="card-title"><%=follower.username%></h5>
+            <p class="card-text"><%=follower.profileDesc.substring(0, 80)%></p>
+            <a href="/users/<%=follower._id%>" class="btn btn-primary"
+              >Profile</a
+            >
+          </div>
+        </div>
+      </div>
+      <%}%> <%}%>
+    </div>
+  </div>
+  <%- include("partials/_footer") %>
+</body>

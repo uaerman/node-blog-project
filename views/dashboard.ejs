@@ -35,12 +35,16 @@
                                         <div class="uppercase profile-stat-text"> Posts </div>
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-xs-6">
-                                        <div class="uppercase profile-stat-title"> 51 </div>
-                                        <div class="uppercase profile-stat-text"> Tasks </div>
+                                      <div class="uppercase profile-stat-title">
+                                        <%=user.followers.length%>
+                                      </div>
+                                      <div class="uppercase profile-stat-text"><a class="profile-stat-text" href="/users/<%=user._id%>/followers">Followers</a></div>
                                     </div>
                                     <div class="col-md-4 col-sm-4 col-xs-6">
-                                        <div class="uppercase profile-stat-title"> 61 </div>
-                                        <div class="uppercase profile-stat-text"> Uploads </div>
+                                      <div class="uppercase profile-stat-title">
+                                        <%=user.followings.length%>
+                                      </div>
+                                      <div class="uppercase profile-stat-text"><a class="profile-stat-text" href="/users/<%=user._id%>/followings">Followings</a></div>
                                     </div>
                                 </div>
                                 <!-- END STAT -->

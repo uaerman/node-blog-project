@@ -4,6 +4,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser';
 import router from './src/router/pageRouter.js'
 import postRouter from './src/router/postRouter.js'
+import methodOverride from "method-override";
 import fileUpload from "express-fileupload"
 import { v2 as cloudinary } from 'cloudinary';
 import { userRoute } from './src/router/userRouter.js';
@@ -33,6 +34,9 @@ app.use(cookieParser())
 app.use(express.static('src/public'))
 app.use(fileUpload({useTempFiles: true}))
 app.use(express.urlencoded({extended: true}))
+app.use(methodOverride('_method', {
+  methods: ['POST', 'GET'],
+}))
 
 app.use('*', checkUser)
 app.use('/', router)

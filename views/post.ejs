@@ -1,55 +1,118 @@
 <%- include("partials/_header") %>
-    <!-- body -->
+<!-- body -->
 
-    <body class="main-layout">
-        <!-- loader  -->
-        <!-- header -->
-        <header>
-            <!-- header inner -->
-            <%- include("partials/_menu") %>
-                <!-- header -->
-                <link rel="stylesheet" href="/css/post.css">
-                <div style="margin-bottom: -50px;">
-                    <div class="card-wrapper">
-                        <div class="card">
-                            <!-- card left -->
-                            <div class="post-imgs">
-                                <div class="img-display">
-                                    <div class="img-showcase">
-                                        <img src="<%=post.url%>" alt="Post Thumbnail"
-                                            alt="Post Thumbnail" /></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- card right -->
-                            <div class="post-content">
-                                <h2 class="post-title">
-                                    <%=post.title%>
-                                </h2>
-                                <div class="post-price">
-                                    <p class="new-price">Creator: <span><a href=""><%=post.creator.username%></a></span></p>
-                                </div>
+<body class="main-layout">
+  <!-- loader  -->
+  <!-- header -->
+  <header>
+    <!-- header inner -->
+    <%- include("partials/_menu") %>
+    <!-- header -->
+    <link rel="stylesheet" href="/css/post.css" />
+    <div style="margin-bottom: -50px">
+      <div class="card-wrapper">
+        <div class="card">
+          <!-- card left -->
+          <div class="post-imgs">
+            <div class="img-display">
+              <div class="img-showcase">
+                <img
+                  src="<%=post.url%>"
+                  alt="Post Thumbnail"
+                  alt="Post Thumbnail"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- card right -->
+          <div class="post-content">
+            <h2 class="post-title"><%=post.title%></h2>
+            <div class="post-price">
+              <p class="new-price">
+                Creator:
+                <span
+                  ><a href="/users/<%=post.creator._id%>"
+                    ><%=post.creator.username.toUpperCase()%></a
+                  ></span
+                >
+              </p>
+            </div>
 
-                                <div class="post-detail">
-                                    <h2>Content: </h2>
-                                    <p>
-                                        <%=post.content%>
-                                    </p>
-                                </div>
+            <div class="post-detail">
+              <h2>Content:</h2>
+              <p><%=post.content%></p>
+            </div>
 
-                                <div class="post-info">
-                                    <button class="btn btn-primary" onclick="location.href='https://www.buymeacoffee.com/uaerman'"
-                                        type="button">
-                                        Support Creator <i class="fa fa-heart" aria-hidden="true"></i>
-                                    </button>
-                                    <button class="btn btn-success" onclick="location.href='/'" type="button">
-                                        Return Home <i class="fa fa-right-from-bracket" aria-hidden="true"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- footer -->
-                <%- include("partials/_footer") %>
-
+            <div class="post-info">
+              <button
+                class="btn btn-primary"
+                onclick="location.href='https://www.buymeacoffee.com/uaerman'"
+                type="button"
+              >
+                <i class="fa fa-heart" aria-hidden="true"></i>
+                Support Creator
+              </button>
+              <button
+                class="btn btn-success"
+                onclick="location.href='/'"
+                type="button"
+              >
+                <i class="fa fa-right-from-bracket" aria-hidden="true"></i>
+                Return Home
+              </button>
+              <% if (isOwner) {%>
+              <br />
+              <button
+                class="btn btn-warning"
+                onclick="openForm()"
+                type="button"
+              >
+                <i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>
+                Edit Post
+              </button>
+              <button
+                class="btn btn-danger"
+                onclick="location.href='/posts/<%= post._id %>?_method=DELETE'"
+                type="button"
+              >
+                <i class="fa fa-trash-can" aria-hidden="true"></i> Delete Post
+              </button>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="newPost">
+        <div class="formPopup" id="popupForm">
+            <form id="request" class="formContainer" action="/posts/<%=post._id %>?_method=PUT" method="post" enctype="multipart/form-data">
+            <h2>Edit Post</h2>
+            <label for="title">
+              <strong>Title</strong>
+            </label>
+            <input type="text" id="title" value="<%=post.title%>" placeholder="Post Title" name="title" required>
+            <label for="content">
+              <strong>Content</strong>
+            </label>
+            <input type="text" id="content" value="<%=post.content%>" placeholder="Post Content" name="content" required>
+            <label for="image">
+              <strong>Post Thumbnail</strong> 
+            </label>
+            <input type="file" name="image" class="form-control-file">
+            <button type="submit" class="btn btn-success">Edit Post</button>
+            <button type="button" class="btn btn-danger" onclick="closeForm()">Close</button>
+          </form>
+        </div>
+      </div>
+    <!-- footer -->
+    <%- include("partials/_footer") %>
+  </header>
+</body>
+<script>
+    function openForm() {
+      document.getElementById("popupForm").style.display = "block";
+    }
+    function closeForm() {
+      document.getElementById("popupForm").style.display = "none";
+    }
+  </script>

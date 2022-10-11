@@ -7,6 +7,18 @@ import { authenticateToken } from "../middlewares/authMiddleware.js";
 import { User, Post } from "../models/mongooseModel.js";
 
 const userRoute = express.Router();
+
+userRoute.get("/:id/:follow/", async (req, res) => {
+  if (req.params.follow !== 'followers' && req.params.follow !== 'followings') return res.redirect(`/users/${req.params.id}`)
+  let follow = req.params.follow
+  const user = await User.findById(req.params.id).populate(['followers', 'followings'])
+  res.render("follow", {
+    link: "users",
+    user,
+    follow
+  });
+});
+
 userRoute.post("/register", async (req, res) => {
   try {
     const user = new User(req.body);
@@ -54,7 +66,7 @@ userRoute.post("/login", async (req, res) => {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24,
       });
-      res.redirect("/");
+      res.redirect("/users/dashboard");
     } else {
       res.status(401).json({
         succeded: false,
@@ -78,6 +90,19 @@ userRoute.get("/dashboard", authenticateToken, async (req, res) => {
     posts,
   });
 });
+userRoute.get("/:id", authenticateToken, async (req, res) => {
+  const user = await User.findById({ _id: req.params.id });
+  const inFollowers = user.followers.some((follower) => {
+    return follower.equals(res.locals.user._id)
+  })
+  const posts = await Post.find({ creator: req.params.id });
+  res.render("user", {
+    link: "users",
+    user,
+    posts,
+    inFollowers
+    });
+});
 userRoute.post("/update", async (req, res) => {
   try {
     const user = await User.findById(res.locals.user._id);
@@ -90,7 +115,7 @@ userRoute.post("/update", async (req, res) => {
         req.files.image.tempFilePath,
         {
           use_filename: true,
-          folder: "lenslight",
+          folder: "blogapp",
         }
       );
       user.url = result.secure_url;
@@ -102,6 +127,61 @@ userRoute.post("/update", async (req, res) => {
     res.status(200).redirect(`/users/dashboard`);
   } catch (error) {
     console.log(error)
+    res.status(500).json({
+      succeded: false,
+      error,
+    });
+  }
+});
+userRoute.get("/follow/:id", authenticateToken, async (req, res) => {
+  // res.locals.user._id
+  try {
+    let user = await User.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $push: { followers: res.locals.user._id },
+      },
+      { new: true }
+    );
+
+    user = await User.findByIdAndUpdate(
+      { _id: res.locals.user._id },
+      {
+        $push: { followings: req.params.id },
+      },
+      { new: true }
+    );
+
+    res.status(200).redirect(`/users/${req.params.id}`);
+  } catch (error) {
+    res.status(500).json({
+      succeded: false,
+      error,
+    });
+  }
+});
+
+userRoute.get("/unfollow/:id", authenticateToken, async (req, res) => {
+  // res.locals.user._id
+  try {
+    let user = await User.findByIdAndUpdate(
+      { _id: req.params.id },
+      {
+        $pull: { followers: res.locals.user._id },
+      },
+      { new: true }
+    );
+
+    user = await User.findByIdAndUpdate(
+      { _id: res.locals.user._id },
+      {
+        $pull: { followings: req.params.id },
+      },
+      { new: true }
+    );
+
+    res.status(200).redirect(`/users/${req.params.id}`);
+  } catch (error) {
     res.status(500).json({
       succeded: false,
       error,
