@@ -8,7 +8,7 @@
           <%for (post of posts) {%>
             <div class="col-sm-3">
               <div class="card posts-card" style="width: 18rem; margin-top: 25px;">
-                <img class="card-img-top" src="<%=post.thumbnail%>" alt="Card image cap">
+                <img class="card-img-top" src="<%=post.url%>" alt="Card image cap">
                 <div class="card-body">
                   <h5 class="card-title"><%=post.title%></h5>
                   <p class="card-text"><%=post.content.substring(0, 80)%></p>

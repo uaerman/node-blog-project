@@ -1,7 +1,9 @@
+import fs from "fs"
 import express from "express";
+import {v2 as cloudinary} from "cloudinary"
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
+import { authenticateToken } from "../middlewares/authMiddleware.js";
 import { User, Post } from "../models/mongooseModel.js";
 
 const userRoute = express.Router();
@@ -60,6 +62,45 @@ userRoute.post("/login", async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      succeded: false,
+      error,
+    });
+  }
+});
+userRoute.get("/dashboard", authenticateToken, async (req, res) => {
+  const posts = await Post.find({ creator: res.locals.user._id });
+  const user = await User.findById({ _id: res.locals.user._id });
+  res.render("dashboard", {
+    link: "dashboard",
+    user,
+    posts,
+  });
+});
+userRoute.post("/update", async (req, res) => {
+  try {
+    const user = await User.findById(res.locals.user._id);
+    if (req.files) {
+      if (user.image_id) {
+        const photoId = user.image_id;
+        await cloudinary.uploader.destroy(photoId);
+      }
+      const result = await cloudinary.uploader.upload(
+        req.files.image.tempFilePath,
+        {
+          use_filename: true,
+          folder: "lenslight",
+        }
+      );
+      user.url = result.secure_url;
+      user.image_id = result.public_id;
+      fs.unlinkSync(req.files.image.tempFilePath);
+    }
+    user.profileDesc = req.body.profileDesc;
+    user.save();
+    res.status(200).redirect(`/users/dashboard`);
+  } catch (error) {
     console.log(error)
     res.status(500).json({
       succeded: false,
@@ -74,4 +115,4 @@ const createToken = (userId) => {
   });
 };
 
-export { userRoute, createToken};
+export { userRoute, createToken };

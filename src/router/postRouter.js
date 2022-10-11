@@ -1,4 +1,6 @@
+import fs from "fs"
 import express from "express";
+import {v2 as cloudinary} from "cloudinary"
 import {User, Post} from '../models/mongooseModel.js'
 
 const postRouter = express.Router()
@@ -18,19 +20,32 @@ postRouter.get('/', async (req, res) => {
     })
 })
 
-postRouter.post('/', async (req, res) => {
+postRouter.post('/create', async (req, res) => {
+    const result = await cloudinary.uploader.upload(
+        req.files.image.tempFilePath,
+        {
+          use_filename: true,
+          folder: 'lenslight',
+        }
+      );
     try {
-        const createdPost = await Post.create(req.body) 
-        res.status(201).json({
-            succeed: true,
-            createdPost
-        })
-    } catch (error) {
-        res.status(400).json({
-            succeed: false,
-            error
-        })
-    }
+        await Post.create({
+          title: req.body.title,
+          content: req.body.content,
+          creator: res.locals.user._id,
+          url: result.secure_url,
+          image_id: result.public_id
+        });
+    
+        fs.unlinkSync(req.files.image.tempFilePath)
+    
+        res.status(201).redirect('/users/dashboard');
+      } catch (error) {
+        res.status(500).json({
+          succeded: false,
+          error,
+        });
+      }
 })
 postRouter.delete('/:id', async (req, res) => {
     try {

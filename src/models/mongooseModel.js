@@ -29,7 +29,8 @@ const postSchema = new Schema(
   {
     title: reqString,
     content: reqString,
-    thumbnail: reqString,
+    url: reqString,
+    image_id: reqString,
     creator: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -46,6 +47,13 @@ const userSchema = new Schema(
     profileDesc: {
       type: String,
       default: "No description added",
+    },
+    url: {
+      type: String,
+      default: "https://cdn.uaerman.dev/images/infinityheart.png",
+    },
+    image_id: {
+      type: String,
     },
     password: password,
   },

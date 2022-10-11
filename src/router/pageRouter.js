@@ -20,5 +20,10 @@ router.get("/login", async (req, res) => {
     link: "login",
   });
 });
-
+router.get("/logout", async (req, res) => {
+  res.cookie('jsonwebtoken', '', {
+    maxAge: 1,
+})
+res.redirect('/')
+});
 export default router;
