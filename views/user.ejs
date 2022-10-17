@@ -24,7 +24,7 @@
           <div class="profile-userbuttons">
             <% if (!inFollowers) { %>
             <button
-              onclick="location.href= '/users/follow/<%=user._id%>'"
+              onclick="location.href= '/users/follow/<%=user._id%>?_method=PUT'"
               type="button"
               class="btn btn-success btn-sm"
             >
@@ -32,7 +32,7 @@
             </button>
             <% } else { %>
             <button
-              onclick="location.href = '/users/unfollow/<%=user._id%>'"
+              onclick="location.href = '/users/unfollow/<%=user._id%>?_method=PUT'"
               type="button"
               class="btn btn-success btn-sm"
             >
@@ -40,7 +40,7 @@
             </button>
             <% } %>
             <button
-              onclick="openEditForm()"
+              onclick="location.href='https://www.buymeacoffee.com/uaerman'"
               type="button"
               class="btn btn-primary btn-sm"
             >
@@ -62,13 +62,25 @@
                 <div class="uppercase profile-stat-title">
                   <%=user.followers.length%>
                 </div>
-                <div class="uppercase profile-stat-text"><a class="profile-stat-text" href="/users/<%=user._id%>/followers">Followers</a></div>
+                <div class="uppercase profile-stat-text">
+                  <a
+                    class="profile-stat-text"
+                    href="/users/<%=user._id%>/followers"
+                    >Followers</a
+                  >
+                </div>
               </div>
               <div class="col-md-4 col-sm-4 col-xs-6">
                 <div class="uppercase profile-stat-title">
                   <%=user.followings.length%>
                 </div>
-                <div class="uppercase profile-stat-text"><a class="profile-stat-text" href="/users/<%=user._id%>/followings">Followings</a></div>
+                <div class="uppercase profile-stat-text">
+                  <a
+                    class="profile-stat-text"
+                    href="/users/<%=user._id%>/followings"
+                    >Followings</a
+                  >
+                </div>
               </div>
             </div>
             <!-- END STAT -->

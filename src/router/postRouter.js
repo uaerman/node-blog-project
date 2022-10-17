@@ -1,7 +1,7 @@
 import fs from "fs";
 import express from "express";
 import { v2 as cloudinary } from "cloudinary";
-import { User, Post } from "../models/mongooseModel.js";
+import { Post } from "../models/mongooseModel.js";
 import { authenticateToken } from "../middlewares/authMiddleware.js";
 
 const postRouter = express.Router();
